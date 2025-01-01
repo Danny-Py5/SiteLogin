@@ -12,7 +12,7 @@
         body{
             background-image: linear-gradient(black 50% , purple);
         }
-        section{
+        form{
             display:flex;
             flex-flow: column nowrap;
             margin: 5% auto;
@@ -21,6 +21,9 @@
             /* background-color: rgba(218, 206, 206, 0.5); */
             color: white;
             max-width: 1000px;
+        }
+        a:any-link{
+            color: inherit;
         }
         label[for='phone']{
             margin-top: 1.5rem;
@@ -67,12 +70,12 @@
             }
         }
         @media (max-width: 750px) {
-            section{
+            form{
                 width: 80%;
             }
         }
         @media (max-width: 400px){
-            section{
+            form{
                 width: 100%;
                 padding: 0;
             }
@@ -80,7 +83,7 @@
     </style>
 </head>
 <body>
-    <section>
+    <form method="get" id="form">
         <h1>Login</h1>
         
         <label class="name" for="name">Name</label>
@@ -90,7 +93,8 @@
         <input type="text" placeholder="Phone" id="phone">
 
         <button>Submit</button>
-    </section>
+        <p>I don't have an account: <a href="/sign-in.html">Sign</a></p>
+    </form>
 
     <script>
         const inputs = document.querySelectorAll('input');

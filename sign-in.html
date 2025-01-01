@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+
+    <style>
+        html{
+            font-family: system-ui;
+        }
+        body{
+            background-image: linear-gradient(black 50% , purple);
+        }
+        form{
+            display:flex;
+            flex-flow: column nowrap;
+            margin: 5% auto;
+            width: 50%;
+            padding: 2rem 1rem;
+            /* background-color: rgba(218, 206, 206, 0.5); */
+            color: white;
+            max-width: 1000px;
+        }
+        label[for='phone']{
+            margin-top: 1.5rem;
+        }
+        input, button{
+            margin-top: 2rem;
+        }
+        input{
+            padding: .8rem .5rem;
+            border: none;
+            border-radius: .4rem;
+            font: inherit;
+        }
+        .input--explict-margin-top{
+            margin-top: .5rem;
+        }
+        
+        button{
+            padding: .8rem;
+            border-radius: .4rem;
+            font: inherit;
+            border: 2px solid rgba(255, 255, 255, 0.682);
+            text-transform: uppercase;
+            color: rgb(255, 255, 255);
+            font-weight: 600;
+            background-color: rgba(83, 0, 88, 0.901);
+        }
+        label{
+            display: none;
+        }
+       
+        .showlabel{
+            display: block;
+            animation: label .5s cubic-bezier(.8, 0.82, 0.1,  1);
+        }
+        @keyframes label {
+            from{
+                transform: translateY(30px)
+            }
+            80%{
+                transform: translateY(-5px);
+            }
+            to{
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 750px) {
+            form{
+                width: 80%;
+            }
+        }
+        @media (max-width: 400px){
+            form{
+                width: 100%;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="post" id="form" action="#">
+        <h1>Sign in</h1>
+        
+        <label class="name" for="name">Name</label>
+        <input type="text" placeholder="Input your full name" required id="name">
+
+        <label class="phone" for="phone">Phone</label>
+        <input required type="text" placeholder="Phone" id="phone">
+        
+        <label class="email" for="email">Email</label>
+        <input required type="email" placeholder="Input your email" id="email">
+
+        <button type="submit">Submit</button>
+        <p>Already have an account. <a href="./purple-bg-lable-animated.html">Sign</a></p>
+    </form>
+
+    <script>
+        const inputs = document.querySelectorAll('input');
+
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+            
+                showLabel(input.id);
+            })
+        })
+
+        function normalize(inpuId){
+            document.querySelectorAll('label').forEach(label => {
+                label.classList.remove('showlabel');
+            })
+            document.querySelectorAll('input').forEach(input => {
+                input.classList.remove('input--explict-margin-top');
+            })
+        }
+        function showLabel(inpuId){
+            normalize(inpuId);
+
+            document.querySelector(`.${inpuId}`).classList.add('showlabel');
+            
+            document.getElementById(`${inpuId}`).classList.add('input--explict-margin-top');
+
+        }
+    </script>
+
+        <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCQ8HVsBl46pYN5nsKTPNGsK1EJxQnqHbM",
+          authDomain: "signinapp-e306a.firebaseapp.com",
+          projectId: "signinapp-e306a",
+          storageBucket: "signinapp-e306a.firebasestorage.app",
+          messagingSenderId: "367050089736",
+          appId: "1:367050089736:web:4a3b70ab61500b3d74b8bd"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const signInForm = document.getElementById("sign-in-form");
+        const signOutButton = document.getElementById("sign-out-button");
+
+        // Sign In
+        signInForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            alert("Signed in successfully!");
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+        });
+
+        // Sign Out
+        signOutButton.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            alert("Signed out successfully!");
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+        });
+
+        // Track Authentication State
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            signInForm.style.display = "none";
+            signOutButton.style.display = "block";
+            console.log("User signed in:", user.email);
+        } else {
+            signInForm.style.display = "block";
+            signOutButton.style.display = "none";
+            console.log("No user signed in.");
+        }
+        });
+
+    </script>
+</body>
+</html>
